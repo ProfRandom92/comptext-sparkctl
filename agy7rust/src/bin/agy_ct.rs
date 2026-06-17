@@ -124,6 +124,8 @@ enum PackageCommands {
     Adversarial {
         #[arg(long, short)]
         input: String,
+        #[arg(long = "target-field")]
+        target_field: Option<String>,
     },
 }
 
@@ -240,8 +242,11 @@ fn main() -> Result<()> {
                 };
                 agy7rust::commands::replay_cmd::run(input, options)?;
             }
-            PackageCommands::Adversarial { input } => {
-                agy7rust::commands::adversarial::run(input)?;
+            PackageCommands::Adversarial {
+                input,
+                target_field,
+            } => {
+                agy7rust::commands::adversarial::run(input, target_field.as_deref())?;
             }
         },
         Commands::Context { subcommand } => match subcommand {

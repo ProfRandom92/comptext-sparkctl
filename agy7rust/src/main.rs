@@ -17,8 +17,11 @@ fn main() -> anyhow::Result<()> {
         Commands::Replay { input } => {
             agy7rust::commands::replay_cmd::run(&input, Default::default())?;
         }
-        Commands::Adversarial { input } => {
-            agy7rust::commands::adversarial::run(&input)?;
+        Commands::Adversarial {
+            input,
+            target_field,
+        } => {
+            agy7rust::commands::adversarial::run(&input, target_field.as_deref())?;
         }
         Commands::SchemaCheck { input, schema } => {
             agy7rust::commands::schema_check::run(&input, &schema)?;

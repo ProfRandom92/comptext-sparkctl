@@ -1,0 +1,54 @@
+{
+  "workflow_id": "bmds-spark-workflow-opencode-snapshot",
+  "source": "gitlab.opencode.de/bmds/planungs-und-genehmigungsbeschleunigung/spark-workflow",
+  "mode": "synthetic_repo_snapshot",
+  "official_claim": false,
+  "human_review_required": true,
+  "no_real_administrative_data": true,
+  "scope": {
+    "kind": "SPARK-adjacent local reference corpus",
+    "runtime": "local/offline",
+    "data": "synthetic-only",
+    "claims": [
+      "no official BMDS compatibility claim",
+      "no legal compliance claim",
+      "no production readiness claim",
+      "no certification claim"
+    ]
+  },
+  "documents": [
+    {
+      "name": "README.md",
+      "type": "repository_overview",
+      "path": "examples/spark/opencode/README.md"
+    },
+    {
+      "name": "publiccode.yml",
+      "type": "publiccode_metadata",
+      "path": "examples/spark/opencode/publiccode.yml"
+    },
+    {
+      "name": "roadmap.md",
+      "type": "roadmap",
+      "path": "examples/spark/opencode/roadmap.md"
+    },
+    {
+      "name": "CHANGELOG.md",
+      "type": "change_log",
+      "path": "examples/spark/opencode/CHANGELOG.md"
+    },
+    {
+      "name": "CONTRIBUTING.md",
+      "type": "contribution_policy",
+      "path": "examples/spark/opencode/CONTRIBUTING.md"
+    }
+  ],
+  "expected_controls": [
+    "schema_check",
+    "package_verify",
+    "deterministic_replay",
+    "adversarial_detection",
+    "context_render",
+    "human_handoff"
+  ]
+}

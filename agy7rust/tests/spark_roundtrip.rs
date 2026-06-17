@@ -7,6 +7,11 @@ use agy7rust::codec::package::{
 };
 use agy7rust::sha256_hex;
 use serde_json::json;
+use std::fs;
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+static TEST_FILE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[test]
 fn test_canonical_json_sorting() {
@@ -384,6 +389,69 @@ fn test_replay_canonical_format() {
 }
 
 #[test]
+fn test_adversarial_uses_nested_parcel_id_for_extraction_json_and_package() {
+    let original: serde_json::Value =
+        serde_json::from_str(include_str!("../../examples/spark/extraction.json")).unwrap();
+    let raw_path = write_test_json("adversarial-extraction", &original);
+    agy7rust::commands::adversarial::run(raw_path.to_str().unwrap(), None)
+        .expect("adversarial should resolve extraction.fields.parcel_id from raw JSON");
+
+    let package = build_package_from_value(&original).unwrap();
+    let package_path = write_test_json("adversarial-extraction-package", &package);
+    agy7rust::commands::adversarial::run(package_path.to_str().unwrap(), None)
+        .expect("adversarial should resolve extraction.fields.parcel_id from package payload");
+}
+
+#[test]
+fn test_adversarial_uses_workflow_id_fallback_for_bmds_snapshot() {
+    let original: serde_json::Value = serde_json::from_str(include_str!(
+        "../../examples/spark/bmds_workflow_snapshot.json"
+    ))
+    .unwrap();
+    let package = build_package_from_value(&original).unwrap();
+    let package_path = write_test_json("adversarial-bmds-package", &package);
+
+    agy7rust::commands::adversarial::run(package_path.to_str().unwrap(), None)
+        .expect("adversarial should resolve workflow_id fallback");
+}
+
+#[test]
+fn test_adversarial_accepts_explicit_nested_target_field() {
+    let original: serde_json::Value =
+        serde_json::from_str(include_str!("../../examples/spark/extraction.json")).unwrap();
+    let package = build_package_from_value(&original).unwrap();
+    let package_path = write_test_json("adversarial-explicit-package", &package);
+
+    agy7rust::commands::adversarial::run(
+        package_path.to_str().unwrap(),
+        Some("extraction.fields.parcel_id"),
+    )
+    .expect("adversarial should accept explicit nested target field");
+}
+
+#[test]
+fn test_adversarial_reports_available_fields_for_missing_explicit_target() {
+    let original: serde_json::Value =
+        serde_json::from_str(include_str!("../../examples/spark/extraction.json")).unwrap();
+    let package = build_package_from_value(&original).unwrap();
+    let package_path = write_test_json("adversarial-missing-target-package", &package);
+
+    let err = agy7rust::commands::adversarial::run(
+        package_path.to_str().unwrap(),
+        Some("extraction.fields.missing"),
+    )
+    .unwrap_err()
+    .to_string();
+
+    assert!(err.contains("Target field 'extraction.fields.missing' not found in payload"));
+    assert!(err.contains("Available scalar fields:"));
+    assert!(err.contains("case_id"));
+    assert!(err.contains("document_type"));
+    assert!(err.contains("extraction.fields.parcel_id"));
+    assert!(err.contains("extraction.fields.location"));
+}
+
+#[test]
 fn test_schema_checking_scenarios() {
     let valid_input = json!({
         "case_id": "SPARK-2026-0042",
@@ -497,6 +565,18 @@ fn test_schema_checking_scenarios() {
     let res = agy7rust::codec::package::validate_schema(&valid_input, &unsupported_path_schema);
     assert!(res.is_err());
     assert_eq!(res.unwrap_err().to_string(), "unsupported path syntax");
+}
+
+fn write_test_json(prefix: &str, value: &serde_json::Value) -> PathBuf {
+    let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("target")
+        .join("adversarial-tests");
+    fs::create_dir_all(&dir).unwrap();
+
+    let id = TEST_FILE_COUNTER.fetch_add(1, Ordering::SeqCst);
+    let path = dir.join(format!("{}-{}.json", prefix, id));
+    fs::write(&path, canonical_json(value)).unwrap();
+    path
 }
 
 #[test]
@@ -2144,7 +2224,7 @@ fn test_agy_ct_package_adversarial_execution() {
     assert!(!output_failure_corrupt.status.success());
 
     // ============================================
-    // 4. Failure Test 3: Missing Required Fields (missing parcel_id)
+    // 4. Failure Test 3: Explicit target is missing
     // ============================================
     let bad_ctx_missing_fields = json!({
         "case_id": "test-123",
@@ -2170,11 +2250,16 @@ fn test_agy_ct_package_adversarial_execution() {
             "adversarial",
             "-i",
             temp_missing_fields_path.to_str().unwrap(),
+            "--target-field",
+            "extraction.fields.parcel_id",
         ])
         .output()
         .expect("failed to execute cargo run");
 
     assert!(!output_failure_fields.status.success());
+    let stderr_str = String::from_utf8_lossy(&output_failure_fields.stderr);
+    assert!(stderr_str.contains("Target field 'extraction.fields.parcel_id' not found in payload"));
+    assert!(stderr_str.contains("Available scalar fields: case_id"));
 
     // ============================================
     // 5. Cleanup

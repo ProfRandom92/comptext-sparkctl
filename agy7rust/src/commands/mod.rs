@@ -46,6 +46,8 @@ pub enum Commands {
     Adversarial {
         #[arg(short = 'i', long = "input")]
         input: String,
+        #[arg(long = "target-field")]
+        target_field: Option<String>,
     },
     SchemaCheck {
         #[arg(short = 'i', long = "input")]
