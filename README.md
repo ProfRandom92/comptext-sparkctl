@@ -153,6 +153,12 @@ cd agy7rust
 # Testsuite ausführen
 cargo test
 
+# Goldenen Pfad (End-to-End Orchestrator Pipeline) ausführen
+cargo run --bin agy-ct -- run
+
+# Alternativ: Den vordefinierten Spark-Demo-Trace ausführen
+cargo run --bin agy-ct -- demo
+
 # Berichtsexport mit einer synthetischen Beispieldokumentation ausführen
 cargo run --bin agy-ct -- report export -i ../examples/spark/report_sample.json -o ../temp_output.md
 ```
