@@ -34,35 +34,41 @@ pub fn run_handoff_check() -> Result<()> {
             ".agent/skills/06_git_handoff.md",
         ),
         (
-            "../PHASE3_CONTEXT_LAYER_FINAL_SNAPSHOT.md",
-            "PHASE3_CONTEXT_LAYER_FINAL_SNAPSHOT.md",
+            "../docs/archive/spark-hackathon-2026/PHASE3_CONTEXT_LAYER_FINAL_SNAPSHOT.md",
+            "docs/archive/spark-hackathon-2026/PHASE3_CONTEXT_LAYER_FINAL_SNAPSHOT.md",
         ),
         (
-            "../PHASE4A_SPARKCTL_PLANNING_HANDBOOK.md",
-            "PHASE4A_SPARKCTL_PLANNING_HANDBOOK.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4A_SPARKCTL_PLANNING_HANDBOOK.md",
+            "docs/archive/spark-hackathon-2026/PHASE4A_SPARKCTL_PLANNING_HANDBOOK.md",
         ),
         (
-            "../PHASE4B_SPARKCTL_DOCTOR_SNAPSHOT.md",
-            "PHASE4B_SPARKCTL_DOCTOR_SNAPSHOT.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4B_SPARKCTL_DOCTOR_SNAPSHOT.md",
+            "docs/archive/spark-hackathon-2026/PHASE4B_SPARKCTL_DOCTOR_SNAPSHOT.md",
         ),
         (
-            "../PHASE4C_SPARKCTL_RUST_VALIDATE_SNAPSHOT.md",
-            "PHASE4C_SPARKCTL_RUST_VALIDATE_SNAPSHOT.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4C_SPARKCTL_RUST_VALIDATE_SNAPSHOT.md",
+            "docs/archive/spark-hackathon-2026/PHASE4C_SPARKCTL_RUST_VALIDATE_SNAPSHOT.md",
         ),
         (
-            "../PHASE4D_SPARKCTL_CONTEXT_ALL_SNAPSHOT.md",
-            "PHASE4D_SPARKCTL_CONTEXT_ALL_SNAPSHOT.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4D_SPARKCTL_CONTEXT_ALL_SNAPSHOT.md",
+            "docs/archive/spark-hackathon-2026/PHASE4D_SPARKCTL_CONTEXT_ALL_SNAPSHOT.md",
         ),
         (
-            "../PHASE4E_SPARKCTL_SPARK_DEMO_SNAPSHOT.md",
-            "PHASE4E_SPARKCTL_SPARK_DEMO_SNAPSHOT.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4E_SPARKCTL_SPARK_DEMO_SNAPSHOT.md",
+            "docs/archive/spark-hackathon-2026/PHASE4E_SPARKCTL_SPARK_DEMO_SNAPSHOT.md",
         ),
         (
-            "../PHASE4F_SPARKCTL_HANDOFF_CHECK_HANDBOOK.md",
-            "PHASE4F_SPARKCTL_HANDOFF_CHECK_HANDBOOK.md",
+            "../docs/archive/spark-hackathon-2026/PHASE4F_SPARKCTL_HANDOFF_CHECK_HANDBOOK.md",
+            "docs/archive/spark-hackathon-2026/PHASE4F_SPARKCTL_HANDOFF_CHECK_HANDBOOK.md",
         ),
-        ("PHASE4D_STATUS.md", "agy7rust/PHASE4D_STATUS.md"),
-        ("PHASE4E_STATUS.md", "agy7rust/PHASE4E_STATUS.md"),
+        (
+            "../docs/archive/spark-hackathon-2026/PHASE4D_STATUS.md",
+            "docs/archive/spark-hackathon-2026/PHASE4D_STATUS.md",
+        ),
+        (
+            "../docs/archive/spark-hackathon-2026/PHASE4E_STATUS.md",
+            "docs/archive/spark-hackathon-2026/PHASE4E_STATUS.md",
+        ),
         (
             "../artifacts/spark/extraction.spkg",
             "artifacts/spark/extraction.spkg",
